@@ -1,11 +1,35 @@
 const MAP_API_KEY = "AIzaSyBB9SLtMMAk06MZodCNZ7MuvJ2eX2ClGWM"
 
-var park = {
-  name: "Sibbald Point",
-  latLong: {lat: 44.3219564, lng: -79.3254315}
+// initial park data
+var initialParks = [
+  {
+    name: "Sibbald Point",
+    address: "26071 Park Rd, Jacksons Point",
+    lat: 44.3219564,
+    lng: -79.3254315,
+    infoContent: "content belongs here"
+  }, {
+    name: "Awenda",
+    address: "670 Awenda Park Rd, Tiny",
+    lat: 44.846409,
+    lng: -79.998677,
+    infoContent: "content belongs here"
+  }
+]
+
+// location object constructor
+var Location = function(data) {
+  this.name = ko.observable(data.name),
+  this.address = ko.observable(data.address),
+  this.lat = ko.observable(data.lat),
+  this.lng = ko.observable(data.lng),
+  this.infoContent = ko.observable(data.infoContent)
 }
 
-// map stuff
+// array to store markers
+var markers = [];
+
+// map initialization and display
 function initMap() {
   var ontario_centre = {lat: 45.035609, lng: -79.085021};
   var map = new google.maps.Map(document.getElementById('map'), {
@@ -13,18 +37,46 @@ function initMap() {
     center: ontario_centre
   });
 
-  var marker = new google.maps.Marker({
-    position: park.latLong,
-    map: map,
-    title: park.name
-  });
+  // info window to display content when markers are clicked
+  var infoWindow = new google.maps.InfoWindow();
 
-  var contentString = "Hello"
-  var infowindow = new google.maps.InfoWindow({
-    content: contentString
-  });
+  // create markers for park locations
+  for (i=0; i < initialParks.length; i++) {
+    var marker = new google.maps.Marker({
+      position: {lat: initialParks[i].lat, lng: initialParks[i].lng},
+      map: map,
+      title: initialParks[i].name
+    });
+    markers.push(marker);
+    // populateInfoWindow on marker click
+    marker.addListener('click', function() {
+      populateInfoWindow(this, infoWindow);
+    });
+  }
+}
 
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
+// set infowindow content to marker data and open
+function populateInfoWindow(marker, infoWindow) {
+  if (infoWindow.marker != marker) {
+    infoWindow.setContent('');
+    infoWindow.marker = marker;
+    infoWindow.setContent('<div>' + marker.title + '</div>');
+    infoWindow.open(map, marker);
+  }
+}
+
+var ViewModel = function() {
+
+  var self = this
+
+  // observable array for parks
+  this.parkList = ko.observableArray([])
+  console.log(this.parkList);
+
+  // create Location objects for each park and add to parkList array
+  initialParks.forEach(function(data) {
+    self.parkList.push(new Location(data));
   });
 }
+
+ko.applyBindings(new ViewModel())
