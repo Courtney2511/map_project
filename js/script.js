@@ -67,8 +67,12 @@ function initMap() {
       title: initialParks[i].name
     });
     markers.push(marker);
+    // marker.addListener('mouseover', function() {
+    //   marker.setAnimation(google.maps.Animation.BOUNCE);
+    // });
     // populateInfoWindow on marker click
-    marker.addListener('click', function() {
+    marker.addListener('click', function(marker) {
+      this.setAnimation(4);
       populateInfoWindow(this, infoWindow);
     });
   }
