@@ -17,6 +17,25 @@ var initialParks = [
   }
 ]
 
+// Load the Facebook SDK
+window.fbAsyncInit = function() {
+    FB.init({
+      appId            : '1564943346912728',
+      autoLogAppEvents : true,
+      xfbml            : true,
+      version          : 'v2.9'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "https://connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
 // location object constructor
 var Location = function(data) {
   this.name = ko.observable(data.name),
@@ -55,12 +74,17 @@ function initMap() {
   }
 }
 
-// set infowindow content to marker data and open
+  // set infowindow content to marker data and open
 function populateInfoWindow(marker, infoWindow) {
+  var app_id = '1564943346912728';
+  var app_secret = '1bcf3ad4d4708361f6988bce3ebb6d34';
   if (infoWindow.marker != marker) {
     infoWindow.setContent('');
     infoWindow.marker = marker;
     infoWindow.setContent('<div>' + marker.title + '</div>');
+    FB.api('/113124472034820', {access_token: `${app_id}|${app_secret}`}, function(response) {
+    console.log(response);
+    });
     infoWindow.open(map, marker);
   }
 }
@@ -71,7 +95,6 @@ var ViewModel = function() {
 
   // observable array for parks
   this.parkList = ko.observableArray([])
-  console.log(this.parkList);
 
   // create Location objects for each park and add to parkList array
   initialParks.forEach(function(data) {
