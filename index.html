@@ -7,18 +7,18 @@
 </head>
 <body>
 
-  <h3>Ontario Provincial Parks</h3>
+  <h3>Aurora Area Restaurants</h3>
 
   <div id="search-bar">
-    <!-- Search Bar for Park Look Up -->
+    <!-- Search Bar for Restaurant Look Up -->
     <input id="main-search" type="search" data-bind="value: filter, valueUpdate: 'afterkeydown'">
-    <!--  List of Parks-->
-    <ul id="park-list" data-bind="foreach: filteredParks">
+    <!--  List of Restaurants-->
+    <ul id="restaurant-list" data-bind="foreach: filteredRestaurants">
         <li data-bind="text: name"></li>
     </ul>
   </div>
 
-  <!-- Google Map with Parks -->
+  <!-- Google Map with Restaurants -->
   <div id="map"></div>
 
   <!--  Javascript -->
