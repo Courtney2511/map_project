@@ -14,6 +14,12 @@ var initialParks = [
     lat: 44.846409,
     lng: -79.998677,
     infoContent: "content belongs here"
+  }, {
+    name: "McRae Point",
+    address: "4366 McRae Park Road, Ramara Township",
+    lat: 44.5705296,
+    lng: -79.3243923,
+    infoContent: "content belongs here"
   }
 ]
 
@@ -98,12 +104,30 @@ var ViewModel = function() {
   var self = this
 
   // observable array for parks
-  this.parkList = ko.observableArray([])
+  self.parkList = ko.observableArray([])
+
+  // observable array for filtered parks
+  self.filter = ko.observable('');
 
   // create Location objects for each park and add to parkList array
   initialParks.forEach(function(data) {
     self.parkList.push(new Location(data));
   });
+
+  //
+  self.filteredParks = ko.computed(function() {
+    var filter = self.filter().toLowerCase();
+    if (!filter) {
+        return self.parkList();
+    } else {
+        return ko.utils.arrayFilter(self.parkList(), function(park) {
+            return park.name().toLowerCase().indexOf(filter) !== -1;
+        });
+    }
+}, ViewModel);
 }
+
+
+
 
 ko.applyBindings(new ViewModel())

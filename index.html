@@ -11,10 +11,10 @@
 
   <div id="search-bar">
     <!-- Search Bar for Park Look Up -->
-    <input type="text" id="main-search" placeholder="Search Parks">
+    <input id="main-search" type="search" data-bind="value: filter, valueUpdate: 'afterkeydown'">
     <!--  List of Parks-->
-    <ul id="park-list" data-bind="foreach: parkList">
-      <li data-bind="text: name"></li>
+    <ul id="park-list" data-bind="foreach: filteredParks">
+        <li data-bind="text: name"></li>
     </ul>
   </div>
 
