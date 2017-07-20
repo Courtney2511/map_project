@@ -1,5 +1,42 @@
 
-#map {
+
+body {
+  background-color: #404040;
+  font-family: Arial;
+  margin: 0;
+}
+
+.container {
+  height: 100%;
   width: 100%;
-  height: 800px;
+}
+
+h3 {
+  color: #f2f2f2;
+  margin: 2px;
+}
+
+#main-search {
+  width: 100%;
+  border-radius: 0;
+}
+
+#list-view {
+  width: 30%;
+  float: left;
+}
+
+#restaurant-list {
+  margin: 2px;
+  background-color: #404040;
+  color: #f2f2f2;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+#map {
+  width: 70%;
+  height: 100vh;
+  float: right;
+  margin: 0;
 }
