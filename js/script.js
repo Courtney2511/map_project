@@ -81,14 +81,15 @@ function populateInfoWindow(marker, infoWindow) {
   if (infoWindow.marker != marker) {
     infoWindow.setContent('');
     infoWindow.marker = marker;
-    FB.api('/search?type=place&center=' + latLng + '&q=' + marker.title + '&distance=1000&fields=checkins,about,description,website,location,overall_star_rating', {access_token: `${APP_ID}|${APP_SECRET}`}, function(response) {
+    FB.api('/search?type=place&center=' + latLng + '&q=' + marker.title + '&distance=1000&fields=checkins,about,website,location,overall_star_rating,picture', {access_token: `${APP_ID}|${APP_SECRET}`}, function(response) {
     // store possible locations in an array
     var possibleLocations = response.data;
     var fbData;
     if (possibleLocations.length === 1) {
       fbData = possibleLocations[0];
     } else {
-      // sort list by checkins, and return the location with the most
+      // sort list by checkins, and return the location with the most, in the case of multiple
+      // facebook pages for the location
       possibleLocations.sort(function(a, b) {
         var x = a.checkins;
         var y = b.checkins;
@@ -96,7 +97,8 @@ function populateInfoWindow(marker, infoWindow) {
       }).reverse();
       fbData = possibleLocations[0];
     }
-    infoWindow.setContent('<div><a href="' + fbData.website + '">' + marker.title + '</a></div><div>Rating:' + fbData.overall_star_rating + '</div>');
+    console.log(fbData.location);
+    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div>' + fbData.location.street + '</div><div>Rating:' + fbData.overall_star_rating + ' checkins:' + fbData.checkins + '</div><div><img src="' + fbData.picture.data.url + '"></div><div>' + fbData.about + '</div><small>resturant details provided by Facebook Places<small>');
     });
     infoWindow.open(map, marker);
   }
