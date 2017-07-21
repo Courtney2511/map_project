@@ -59,6 +59,8 @@ function initMap() {
   // info window to display content when markers are clicked
   var infoWindow = new google.maps.InfoWindow();
 
+  // set bounds for map
+  var bounds = new google.maps.LatLngBounds();
   // create markers for restaurant locations
   for (i=0; i < locationData.length; i++) {
     var marker = new google.maps.Marker({
@@ -67,11 +69,15 @@ function initMap() {
       title: locationData[i].name
     });
     markers.push(marker);
-    // populateInfoWindow on marker click
+    // populateInfoWindow and center map on marker click
     marker.addListener('click', function(marker) {
       this.setAnimation(4);
+      map.setCenter(marker.getPosition)
       populateInfoWindow(this, infoWindow);
     });
+    // add marker position to the map bounds
+    var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
+    bounds.extend(loc);
   }
 }
 
@@ -97,7 +103,6 @@ function populateInfoWindow(marker, infoWindow) {
       }).reverse();
       fbData = possibleLocations[0];
     }
-    console.log(fbData.location);
     infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div>' + fbData.location.street + '</div><div>Rating:' + fbData.overall_star_rating + ' checkins:' + fbData.checkins + '</div><div><img src="' + fbData.picture.data.url + '"></div><div>' + fbData.about + '</div><small>resturant details provided by Facebook Places<small>');
     });
     infoWindow.open(map, marker);
@@ -133,8 +138,5 @@ var ViewModel = function() {
     }
 }, ViewModel);
 }
-
-
-
 
 ko.applyBindings(new ViewModel())
