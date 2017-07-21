@@ -2,6 +2,7 @@ const MAP_API_KEY = "AIzaSyBB9SLtMMAk06MZodCNZ7MuvJ2eX2ClGWM"
 const APP_ID = '1564943346912728';
 const APP_SECRET = '1bcf3ad4d4708361f6988bce3ebb6d34';
 
+var map;
 // initial restaurant data
 var locationData = [
   {
@@ -51,14 +52,18 @@ var markers = [];
 // map initialization and display
 function initMap() {
   var aurora_centre = {lat: 44.003335, lng: -79.450943 };
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     zoom: 11,
     center: aurora_centre
   });
 
+  addMarkers(locationData);
+
+}
+
+function addMarkers(locationData) {
   // info window to display content when markers are clicked
   var infoWindow = new google.maps.InfoWindow();
-
   // set bounds for map
   var bounds = new google.maps.LatLngBounds();
   // create markers for restaurant locations
