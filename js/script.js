@@ -138,8 +138,9 @@ var ViewModel = function() {
     var filter = self.filter().toLowerCase();
     // by default, return the restaurantList
     if (!filter) {
+      hideMarkers();
         if (map) {
-          hideMarkers();
+          addMarkers(convertObservablesToLocations(self.restaurantList()));
         }
         return self.restaurantList();
     } else {
