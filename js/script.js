@@ -61,6 +61,12 @@ function initMap() {
 
 }
 
+function hideMarkers() {
+  for (i=0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
+
 function addMarkers(locationData) {
   // info window to display content when markers are clicked
   var infoWindow = new google.maps.InfoWindow();
@@ -136,6 +142,7 @@ var ViewModel = function() {
     if (!filter) {
         return self.restaurantList();
     } else {
+        hideMarkers();
         // filter restaurants for given letter sequence
         return ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
             return restaurant.name().toLowerCase().indexOf(filter) !== -1;
