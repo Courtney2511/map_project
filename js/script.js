@@ -56,9 +56,7 @@ function initMap() {
     zoom: 11,
     center: aurora_centre
   });
-
   addMarkers(locationData);
-
 }
 
 function hideMarkers() {
@@ -140,15 +138,32 @@ var ViewModel = function() {
     var filter = self.filter().toLowerCase();
     // by default, return the restaurantList
     if (!filter) {
+        if (map) {
+          hideMarkers();
+        }
         return self.restaurantList();
     } else {
         hideMarkers();
         // filter restaurants for given letter sequence
-        return ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
+        var filteredList = ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
             return restaurant.name().toLowerCase().indexOf(filter) !== -1;
         });
+        console.log(convertObservablesToLocations(filteredList));
+        addMarkers(convertObservablesToLocations(filteredList));
+        return filteredList;
     }
 }, ViewModel);
+}
+
+// convert observable instances to location object to pass to addMarker function
+function convertObservablesToLocations(list) {
+   return list.map(function(restaurant) {
+    return {
+      name: restaurant.name(),
+      lat: restaurant.lat(),
+      lng: restaurant.lng()
+    }
+  })
 }
 
 ko.applyBindings(new ViewModel())
