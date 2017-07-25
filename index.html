@@ -13,7 +13,7 @@
   <div id="list-view">
     <h3>Aurora Area Restaurants</h3>
     <!-- Search Bar for Restaurant Look Up -->
-    <input id="main-search" type="search" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+    <input id="main-search" type="search" placeholder="Search Restaurants" data-bind="value: filter, valueUpdate: 'afterkeydown'">
     <!--  List of Restaurants-->
     <ul id="restaurant-list" data-bind="foreach: filteredRestaurants">
         <li data-bind="text: name"></li>

@@ -12,18 +12,21 @@ body {
 h3 {
   color: #f2f2f2;
   margin: 2px;
+  text-align: center;
+  padding-top: 10px;
 }
 
 #main-search {
   width: 100%;
-  border-radius: 0;
+  border: none;
   color: #f2f2f2;
   font-family: inherit;
   font-size: inherit;
+  margin: 5px;
 }
 
 #list-view {
-  width: 30%;
+  width: 20%;
   float: left;
 }
 
@@ -35,15 +38,29 @@ h3 {
   padding-left: 0;
 }
 
+#restaurant-list li {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
 #map {
-  width: 70%;
+  width: 80%;
   height: 100vh;
   float: right;
   margin: 0;
 }
 
-/* info window styles*/
+/* info window styles */
+
+.address, .social-info {
+  padding-bottom: 2px;
+}
+
+.image {
+  padding: 5px;
+}
 
 small {
   color: blue;
+  text-align: center;
 }

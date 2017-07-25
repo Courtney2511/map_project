@@ -122,7 +122,7 @@ function populateInfoWindow(marker, infoWindow) {
       }).reverse();
       fbData = possibleLocations[0];
     }
-    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div>' + fbData.location.street + '</div><div>Rating:' + fbData.overall_star_rating + ' checkins:' + fbData.checkins + '</div><div><img src="' + fbData.picture.data.url + '"></div><div>' + fbData.about +
+    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
         '</div><small>resturant details provided by Facebook Places<small>');
     });
     infoWindow.open(map, marker);
