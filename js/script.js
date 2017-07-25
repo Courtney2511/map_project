@@ -16,7 +16,23 @@ var locationData = [
     name: "Filly & Co",
     lat: 43.991214,
     lng: -79.465786,
-  }
+  }, {
+    name: "Scorpion",
+    lat: 44.018358,
+    lng: -79.447641,
+  }, {
+    name: "Aw Shucks",
+    lat: 43.999143,
+    lng: -79.467943,
+  }, {
+    name: "Ground Burger Bar",
+    lat: 44.052150,
+    lng: -79.455617 ,
+  }, {
+    name: "State & Main",
+    lat: 43.986688,
+    lng: -79.464455,
+  },
 ]
 
 // Load the Facebook SDK
