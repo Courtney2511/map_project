@@ -1,8 +1,7 @@
-const MAP_API_KEY = "AIzaSyBB9SLtMMAk06MZodCNZ7MuvJ2eX2ClGWM"
+const MAP_API_KEY = "AIzaSyBB9SLtMMAk06MZodCNZ7MuvJ2eX2ClGWM";
 const APP_ID = '1564943346912728';
 const APP_SECRET = '1bcf3ad4d4708361f6988bce3ebb6d34';
 
-var map;
 // initial restaurant data
 var locationData = [
   {
@@ -39,13 +38,8 @@ window.fbAsyncInit = function() {
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
-// location object constructor
-var Location = function(data) {
-  this.name = ko.observable(data.name),
-  this.lat = ko.observable(data.lat),
-  this.lng = ko.observable(data.lng)
-}
 
+var map;
 // array to store markers
 var markers = [];
 
@@ -81,7 +75,7 @@ function addMarkers(locationData) {
     // populateInfoWindow and center map on marker click
     marker.addListener('click', function(marker) {
       this.setAnimation(4);
-      map.setCenter(marker.getPosition)
+      map.setCenter(marker.getPosition);
       populateInfoWindow(this, infoWindow);
     });
     // add marker position to the map bounds
@@ -112,7 +106,8 @@ function populateInfoWindow(marker, infoWindow) {
       }).reverse();
       fbData = possibleLocations[0];
     }
-    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div>' + fbData.location.street + '</div><div>Rating:' + fbData.overall_star_rating + ' checkins:' + fbData.checkins + '</div><div><img src="' + fbData.picture.data.url + '"></div><div>' + fbData.about + '</div><small>resturant details provided by Facebook Places<small>');
+    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div>' + fbData.location.street + '</div><div>Rating:' + fbData.overall_star_rating + ' checkins:' + fbData.checkins + '</div><div><img src="' + fbData.picture.data.url + '"></div><div>' + fbData.about +
+        '</div><small>resturant details provided by Facebook Places<small>');
     });
     infoWindow.open(map, marker);
   }
@@ -120,10 +115,10 @@ function populateInfoWindow(marker, infoWindow) {
 
 var ViewModel = function() {
 
-  var self = this
+  var self = this;
 
   // observable array for restaurants
-  self.restaurantList = ko.observableArray([])
+  self.restaurantList = ko.observableArray([]);
 
   // observable array for filtered restaurants
   self.filter = ko.observable('');
@@ -149,11 +144,17 @@ var ViewModel = function() {
         var filteredList = ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
             return restaurant.name().toLowerCase().indexOf(filter) !== -1;
         });
-        console.log(convertObservablesToLocations(filteredList));
         addMarkers(convertObservablesToLocations(filteredList));
         return filteredList;
     }
 }, ViewModel);
+}
+
+// location object constructor
+var Location = function(data) {
+  this.name = ko.observable(data.name),
+  this.lat = ko.observable(data.lat),
+  this.lng = ko.observable(data.lng)
 }
 
 // convert observable instances to location object to pass to addMarker function
@@ -167,4 +168,4 @@ function convertObservablesToLocations(list) {
   })
 }
 
-ko.applyBindings(new ViewModel())
+ko.applyBindings(new ViewModel());
