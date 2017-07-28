@@ -56,6 +56,15 @@ window.fbAsyncInit = function() {
 
 
 var map;
+
+window.setTimeout(function() {
+  if (!map) {
+    errorDiv = document.createElement('div');
+    errorDiv.className = 'error';
+    errorDiv.innerHTML = 'Server Error - Map cannot load';
+    document.getElementById('map').appendChild(errorDiv);
+  }
+}, 3000);
 // array to store markers
 var markers = [];
 
@@ -66,6 +75,10 @@ function initMap() {
     zoom: 11,
     center: aurora_centre
   });
+  if (!map) {
+    console.log('no map');
+  }
+
   addMarkers(locationData);
 }
 
