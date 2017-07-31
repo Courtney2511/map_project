@@ -36,6 +36,10 @@ h3 {
   margin: 5px;
 }
 
+#main-search:focus {
+  color: #404040;
+}
+
 #list-view {
   width: 20%;
   float: left;
