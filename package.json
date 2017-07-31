@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "jsdoc": "^3.5.3",
-    "knockout": "^3.4.2"
-  }
-}
