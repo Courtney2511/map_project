@@ -119,24 +119,31 @@ function populateInfoWindow(marker, infoWindow) {
   if (infoWindow.marker != marker) {
     infoWindow.setContent('');
     infoWindow.marker = marker;
+    infoWindow.setContent('<div>Waiting for Facebook....</div>')
     FB.api('/search?type=place&center=' + latLng + '&q=' + marker.title + '&distance=1000&fields=checkins,about,website,location,overall_star_rating,picture', {access_token: `${APP_ID}|${APP_SECRET}`}, function(response) {
     // store possible locations in an array
     var possibleLocations = response.data;
     var fbData;
-    if (possibleLocations.length === 1) {
-      fbData = possibleLocations[0];
-    } else {
-      // sort list by checkins, and return the location with the most, in the case of multiple
-      // facebook pages for the location
-      possibleLocations.sort(function(a, b) {
-        var x = a.checkins;
-        var y = b.checkins;
-        return ((x < y) ? -1 : (( x > y) ? 1 : 0));
-      }).reverse();
-      fbData = possibleLocations[0];
+
+    if (!response.data) {
+      infoWindow.setContent('<div>Server Error - Facebook unavailable</div>')
     }
-    infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
-        '</div><small>resturant details provided by Facebook Places<small>');
+    if (response.data) {
+      if (possibleLocations.length === 1) {
+        fbData = possibleLocations[0];
+        } else {
+          // sort list by checkins, and return the location with the most, in the case of multiple
+          // facebook pages for the location
+          possibleLocations.sort(function(a, b) {
+            var x = a.checkins;
+            var y = b.checkins;
+            return ((x < y) ? -1 : (( x > y) ? 1 : 0));
+          }).reverse();
+          fbData = possibleLocations[0];
+        }
+        infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
+            '</div><small>resturant details provided by Facebook Places<small>');
+    }
     });
     infoWindow.open(map, marker);
   }
