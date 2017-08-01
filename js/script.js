@@ -3,7 +3,7 @@ const APP_ID = '1564943346912728';
 const APP_SECRET = '1bcf3ad4d4708361f6988bce3ebb6d34';
 
 // initial restaurant data
-var locationData = [
+const locationData = [
   {
     name: "Fishbone",
     lat: 44.003317,
@@ -55,7 +55,7 @@ window.fbAsyncInit = function() {
    }(document, 'script', 'facebook-jssdk'));
 
 
-var map;
+let map;
 
 window.setTimeout(function() {
   if (!map) {
@@ -65,37 +65,37 @@ window.setTimeout(function() {
     document.getElementById('map').appendChild(errorDiv);
   }
 }, 3000);
+
 // array to store markers
-var markers = [];
+let markers = [];
 
 // map initialization and display
 function initMap() {
-  var aurora_centre = {lat: 44.003335, lng: -79.450943 };
+  const aurora_centre = {lat: 44.003335, lng: -79.450943 };
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 11,
     center: aurora_centre
   });
   if (!map) {
     console.log('no map');
-  }
-
+  };
   addMarkers(locationData);
 }
 
 function hideMarkers() {
   for (i=0; i < markers.length; i++) {
     markers[i].setMap(null);
-  }
+  };
 }
 
 function addMarkers(locationData) {
   // info window to display content when markers are clicked
-  var infoWindow = new google.maps.InfoWindow();
+  let infoWindow = new google.maps.InfoWindow();
   // set bounds for map
-  var bounds = new google.maps.LatLngBounds();
+  let bounds = new google.maps.LatLngBounds();
   // create markers for restaurant locations
   for (i=0; i < locationData.length; i++) {
-    var marker = new google.maps.Marker({
+    const marker = new google.maps.Marker({
       position: {lat: locationData[i].lat, lng: locationData[i].lng},
       map: map,
       title: locationData[i].name
@@ -110,48 +110,49 @@ function addMarkers(locationData) {
     // add marker position to the map bounds
     var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
     bounds.extend(loc);
-  }
+  };
 }
 
   // set infowindow content to marker data and open
 function populateInfoWindow(marker, infoWindow) {
-  var latLng = marker.position.lat() + ',' + marker.position.lng();
+  const latLng = marker.position.lat() + ',' + marker.position.lng();
   if (infoWindow.marker != marker) {
     infoWindow.setContent('');
     infoWindow.marker = marker;
-    infoWindow.setContent('<div>Waiting for Facebook....</div>')
+    infoWindow.setContent('<div>Waiting for Facebook....</div>');
     FB.api('/search?type=place&center=' + latLng + '&q=' + marker.title + '&distance=1000&fields=checkins,about,website,location,overall_star_rating,picture', {access_token: `${APP_ID}|${APP_SECRET}`}, function(response) {
-    // store possible locations in an array
-    var possibleLocations = response.data;
-    var fbData;
-
-    if (!response.data) {
-      infoWindow.setContent('<div>Server Error - Facebook unavailable</div>')
-    }
-    if (response.data) {
-      if (possibleLocations.length === 1) {
-        fbData = possibleLocations[0];
-        } else {
-          // sort list by checkins, and return the location with the most, in the case of multiple
-          // facebook pages for the location
-          possibleLocations.sort(function(a, b) {
-            var x = a.checkins;
-            var y = b.checkins;
-            return ((x < y) ? -1 : (( x > y) ? 1 : 0));
-          }).reverse();
+      // store possible locations in an array
+      const possibleLocations = response.data;
+      const fbData;
+      // handle error from facebook server if applicable
+      if (!response.data) {
+        infoWindow.setContent('<div>Server Error - Facebook unavailable</div>')
+      }
+      // populate infoWindow with location data from Facebook
+      if (response.data) {
+        if (possibleLocations.length === 1) {
           fbData = possibleLocations[0];
-        }
-        infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
-            '</div><small>resturant details provided by Facebook Places<small>');
-    }
+          } else {
+            // sort list by checkins, and return the location with the most, in the case of multiple
+            // facebook pages for the location
+            possibleLocations.sort(function(a, b) {
+              const x = a.checkins;
+              const y = b.checkins;
+              return ((x < y) ? -1 : (( x > y) ? 1 : 0));
+            }).reverse();
+            fbData = possibleLocations[0];
+          };
+          infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
+              '</div><small>resturant details provided by Facebook Places<small>');
+      };
     });
     infoWindow.open(map, marker);
-  }
+  };
 }
 
 var ViewModel = function() {
 
-  var self = this;
+  const self = this;
 
   // observable array for restaurants
   self.restaurantList = ko.observableArray([]);
@@ -166,7 +167,7 @@ var ViewModel = function() {
 
   //
   self.filteredRestaurants = ko.computed(function() {
-    var filter = self.filter().toLowerCase();
+    let filter = self.filter().toLowerCase();
     // by default, return the restaurantList
     if (!filter) {
       hideMarkers();
@@ -177,13 +178,13 @@ var ViewModel = function() {
     } else {
         hideMarkers();
         // filter restaurants for given letter sequence
-        var filteredList = ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
+        let filteredList = ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
             return restaurant.name().toLowerCase().indexOf(filter) !== -1;
         });
         addMarkers(convertObservablesToLocations(filteredList));
         return filteredList;
-    }
-}, ViewModel);
+    };
+  }, ViewModel);
 }
 
 // location object constructor
@@ -201,7 +202,7 @@ function convertObservablesToLocations(list) {
       lat: restaurant.lat(),
       lng: restaurant.lng()
     }
-  })
+  });
 }
 
 ko.applyBindings(new ViewModel());
