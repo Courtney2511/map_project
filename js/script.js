@@ -33,7 +33,7 @@ const locationData = [
     lat: 43.986688,
     lng: -79.464455,
   },
-]
+];
 
 // Load the Facebook SDK
 window.fbAsyncInit = function() {
@@ -78,21 +78,28 @@ function initMap() {
   });
   if (!map) {
     console.log('no map');
-  };
+  }
   addMarkers(locationData);
 }
 
 function hideMarkers() {
   for (i=0; i < markers.length; i++) {
     markers[i].setMap(null);
-  };
+  }
 }
 
 function addMarkers(locationData) {
   // info window to display content when markers are clicked
-  let infoWindow = new google.maps.InfoWindow();
+  const infoWindow = new google.maps.InfoWindow();
   // set bounds for map
-  let bounds = new google.maps.LatLngBounds();
+  const bounds = new google.maps.LatLngBounds();
+
+  // add animation to marker and populate infoWindow
+  const markerOnClick = function(marker) {
+    this.setAnimation(4);
+    map.setCenter(marker.getPosition);
+    populateInfoWindow(this, infoWindow);
+  }
   // create markers for restaurant locations
   for (i=0; i < locationData.length; i++) {
     const marker = new google.maps.Marker({
@@ -102,15 +109,11 @@ function addMarkers(locationData) {
     });
     markers.push(marker);
     // populateInfoWindow and center map on marker click
-    marker.addListener('click', function(marker) {
-      this.setAnimation(4);
-      map.setCenter(marker.getPosition);
-      populateInfoWindow(this, infoWindow);
-    });
+    marker.addListener('click', markerOnClick);
     // add marker position to the map bounds
     var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
     bounds.extend(loc);
-  };
+  }
 }
 
   // set infowindow content to marker data and open
@@ -123,7 +126,7 @@ function populateInfoWindow(marker, infoWindow) {
     FB.api('/search?type=place&center=' + latLng + '&q=' + marker.title + '&distance=1000&fields=checkins,about,website,location,overall_star_rating,picture', {access_token: `${APP_ID}|${APP_SECRET}`}, function(response) {
       // store possible locations in an array
       const possibleLocations = response.data;
-      const fbData;
+      let fbData = null;
       // handle error from facebook server if applicable
       if (!response.data) {
         infoWindow.setContent('<div>Server Error - Facebook unavailable</div>')
@@ -141,13 +144,13 @@ function populateInfoWindow(marker, infoWindow) {
               return ((x < y) ? -1 : (( x > y) ? 1 : 0));
             }).reverse();
             fbData = possibleLocations[0];
-          };
+          }
           infoWindow.setContent('<div><h3><a href="' + fbData.website + '">' + marker.title + '</a></h3></div><div class="address">' + fbData.location.street + '</div><div class="socail-info">Rating: <b>' + fbData.overall_star_rating + '</b> Check Ins: <b>' + fbData.checkins + '</b></div><div class="image"><img src="' + fbData.picture.data.url + '"></div><div class="about">' + fbData.about +
               '</div><small>resturant details provided by Facebook Places<small>');
-      };
+      }
     });
     infoWindow.open(map, marker);
-  };
+  }
 }
 
 var ViewModel = function() {
@@ -183,7 +186,7 @@ var ViewModel = function() {
         });
         addMarkers(convertObservablesToLocations(filteredList));
         return filteredList;
-    };
+    }
   }, ViewModel);
 }
 
@@ -192,7 +195,7 @@ var Location = function(data) {
   this.name = ko.observable(data.name),
   this.lat = ko.observable(data.lat),
   this.lng = ko.observable(data.lng)
-}
+};
 
 // convert observable instances to location object to pass to addMarker function
 function convertObservablesToLocations(list) {
@@ -201,7 +204,7 @@ function convertObservablesToLocations(list) {
       name: restaurant.name(),
       lat: restaurant.lat(),
       lng: restaurant.lng()
-    }
+    };
   });
 }
 
