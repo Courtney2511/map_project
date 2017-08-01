@@ -99,7 +99,7 @@ function addMarkers(locationData) {
     this.setAnimation(4);
     map.setCenter(marker.getPosition);
     populateInfoWindow(this, infoWindow);
-  }
+  };
   // create markers for restaurant locations
   for (i=0; i < locationData.length; i++) {
     const marker = new google.maps.Marker({
@@ -129,7 +129,7 @@ function populateInfoWindow(marker, infoWindow) {
       let fbData = null;
       // handle error from facebook server if applicable
       if (!response.data) {
-        infoWindow.setContent('<div>Server Error - Facebook unavailable</div>')
+        infoWindow.setContent('<div>Server Error - Facebook unavailable</div>');
       }
       // populate infoWindow with location data from Facebook
       if (response.data) {
@@ -188,13 +188,13 @@ var ViewModel = function() {
         return filteredList;
     }
   }, ViewModel);
-}
+};
 
 // location object constructor
 var Location = function(data) {
-  this.name = ko.observable(data.name),
-  this.lat = ko.observable(data.lat),
-  this.lng = ko.observable(data.lng)
+  this.name = ko.observable(data.name);
+  this.lat = ko.observable(data.lat);
+  this.lng = ko.observable(data.lng);
 };
 
 // convert observable instances to location object to pass to addMarker function
