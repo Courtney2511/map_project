@@ -68,6 +68,8 @@ window.setTimeout(function() {
 
 // array to store markers
 let markers = [];
+let marker = null;
+let infoWindow = null;
 
 // map initialization and display
 function initMap() {
@@ -88,9 +90,32 @@ function hideMarkers() {
   }
 }
 
+function hideMarker() {
+  marker.setMap(null);
+}
+
+
+function addMarker(locationData) {
+  const markerOnClick = function(marker) {
+    this.setAnimation(4);
+    map.setCenter(marker.getPosition);
+    populateInfoWindow(this, infoWindow);
+  };
+
+  marker = new google.maps.Marker({
+    position: {lat: locationData.lat, lng: locationData.lng},
+    map: map,
+    title: locationData.name
+  });
+
+  // populateInfoWindow and center map on marker click
+  marker.addListener('click', markerOnClick);
+  // add marker position to the map bounds
+}
+
 function addMarkers(locationData) {
   // info window to display content when markers are clicked
-  const infoWindow = new google.maps.InfoWindow();
+  infoWindow = new google.maps.InfoWindow();
   // set bounds for map
   const bounds = new google.maps.LatLngBounds();
 
@@ -208,6 +233,25 @@ function convertObservablesToLocations(list) {
   });
 }
 
+function convertToLocation(restaurant) {
+  return {
+    name: restaurant.name(),
+    lat: restaurant.lat(),
+    lng: restaurant.lng()
+  };
+}
+
+function selectRestaurant(data) {
+  hideMarkers();
+  if (marker) {
+    hideMarker();
+  }
+  toggleMenu();
+  console.log(convertToLocation(data));
+  addMarker(convertToLocation(data));
+}
+
+// toggle restaurant list open and closed
 function toggleMenu() {
   document.getElementById('list').classList.toggle('open-menu');
 }
