@@ -15,7 +15,8 @@
   <div id="list-view">
     <h3>Aurora Area Restaurants</h3>
     <!-- Search Bar for Restaurant Look Up -->
-    <input id="main-search" type="search" placeholder="Search Restaurants" data-bind="value: filter, valueUpdate: 'afterkeydown', click: toggleMenu()"><i class="fa fa-lg fa-bars fa-lg" onclick="toggleMenu()" aria-hidden="true"></i>
+    <input id="main-search" type="search" placeholder="Search Restaurants" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+    <i class="fa fa-lg fa-bars fa-lg" onclick="toggleMenu()" aria-hidden="true"></i>
     <!--  List of Restaurants-->
     <ul id="list" class="restaurant-list" data-bind="foreach: filteredRestaurants">
         <li data-bind="text: name, click: function() { selectRestaurant($data) }"></li>

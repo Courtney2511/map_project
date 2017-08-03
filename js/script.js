@@ -66,7 +66,7 @@ window.setTimeout(function() {
   }
 }, 3000);
 
-// array to store markers
+// initialize global variables for markers, marker and infoWindow
 let markers = [];
 let marker = null;
 let infoWindow = null;
@@ -78,47 +78,33 @@ function initMap() {
     zoom: 11,
     center: aurora_centre
   });
-  if (!map) {
-    console.log('no map');
-  }
   addMarkers(locationData);
 }
 
-function hideMarkers() {
-  for (i=0; i < markers.length; i++) {
-    markers[i].setMap(null);
-  }
-}
 
-function hideMarker() {
-  marker.setMap(null);
-}
-
-
+// takes a location object and adds a marker to the map
 function addMarker(locationData) {
   const markerOnClick = function(marker) {
     this.setAnimation(4);
     map.setCenter(marker.getPosition);
     populateInfoWindow(this, infoWindow);
   };
-
   marker = new google.maps.Marker({
     position: {lat: locationData.lat, lng: locationData.lng},
     map: map,
     title: locationData.name
   });
-
   // populateInfoWindow and center map on marker click
   marker.addListener('click', markerOnClick);
-  // add marker position to the map bounds
 }
 
+
+// takes an array of location data and adds marker objects to the map
 function addMarkers(locationData) {
   // info window to display content when markers are clicked
   infoWindow = new google.maps.InfoWindow();
   // set bounds for map
   const bounds = new google.maps.LatLngBounds();
-
   // add animation to marker and populate infoWindow
   const markerOnClick = function(marker) {
     this.setAnimation(4);
@@ -141,7 +127,7 @@ function addMarkers(locationData) {
   }
 }
 
-  // set infowindow content to marker data and open
+// populates infoWindow with content from Facebook API
 function populateInfoWindow(marker, infoWindow) {
   const latLng = marker.position.lat() + ',' + marker.position.lng();
   if (infoWindow.marker != marker) {
@@ -176,6 +162,16 @@ function populateInfoWindow(marker, infoWindow) {
     });
     infoWindow.open(map, marker);
   }
+}
+// hides the markers array from the map
+function hideMarkers() {
+  for (i=0; i < markers.length; i++) {
+    markers[i].setMap(null);
+  }
+}
+// hides a single marker from the map
+function hideMarker() {
+  marker.setMap(null);
 }
 
 var ViewModel = function() {
