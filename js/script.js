@@ -208,4 +208,8 @@ function convertObservablesToLocations(list) {
   });
 }
 
+function toggleMenu() {
+  document.getElementById('list').classList.toggle('open-menu');
+}
+
 ko.applyBindings(new ViewModel());
