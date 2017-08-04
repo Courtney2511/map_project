@@ -111,6 +111,10 @@ small {
   }
 }
 
+.error {
+  margin-top: 40px;
+}
+
 @media (min-width: 541px) {
   .fa {
     visibility: hidden;

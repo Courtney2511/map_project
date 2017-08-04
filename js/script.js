@@ -57,14 +57,13 @@ window.fbAsyncInit = function() {
 
 let map;
 
-window.setTimeout(function() {
-  if (!map) {
-    errorDiv = document.createElement('div');
-    errorDiv.className = 'error';
-    errorDiv.innerHTML = 'Server Error - Map cannot load';
-    document.getElementById('map').appendChild(errorDiv);
-  }
-}, 3000);
+// displays an error if google maps fails to load
+function googleError() {
+  errorDiv = document.createElement('div');
+  errorDiv.className = 'error';
+  errorDiv.innerHTML = 'Server Error - Map cannot load';
+  document.getElementById('map').appendChild(errorDiv);
+}
 
 // initialize global variables for markers, marker and infoWindow
 let markers = [];
