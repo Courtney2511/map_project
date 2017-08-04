@@ -81,7 +81,6 @@ function initMap() {
   addMarkers(locationData);
 }
 
-
 // takes a location object and adds a marker to the map
 function addMarker(locationData) {
   const markerOnClick = function(marker) {
@@ -98,29 +97,15 @@ function addMarker(locationData) {
   marker.addListener('click', markerOnClick);
 }
 
-
 // takes an array of location data and adds marker objects to the map
 function addMarkers(locationData) {
-  // info window to display content when markers are clicked
   infoWindow = new google.maps.InfoWindow();
   // set bounds for map
   const bounds = new google.maps.LatLngBounds();
-  // add animation to marker and populate infoWindow
-  const markerOnClick = function(marker) {
-    this.setAnimation(4);
-    map.setCenter(marker.getPosition);
-    populateInfoWindow(this, infoWindow);
-  };
   // create markers for restaurant locations
   for (i=0; i < locationData.length; i++) {
-    const marker = new google.maps.Marker({
-      position: {lat: locationData[i].lat, lng: locationData[i].lng},
-      map: map,
-      title: locationData[i].name
-    });
+    addMarker(locationData[i]);
     markers.push(marker);
-    // populateInfoWindow and center map on marker click
-    marker.addListener('click', markerOnClick);
     // add marker position to the map bounds
     var loc = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
     bounds.extend(loc);
@@ -177,18 +162,14 @@ function hideMarker() {
 var ViewModel = function() {
 
   const self = this;
-
   // observable array for restaurants
   self.restaurantList = ko.observableArray([]);
-
   // observable array for filtered restaurants
   self.filter = ko.observable('');
-
   // create Location objects for each restaurant and add to restaurantList array
   locationData.forEach(function(data) {
     self.restaurantList.push(new Location(data));
   });
-
   //
   self.filteredRestaurants = ko.computed(function() {
     let filter = self.filter().toLowerCase();
@@ -210,15 +191,13 @@ var ViewModel = function() {
     }
   }, ViewModel);
 };
-
 // location object constructor
 var Location = function(data) {
   this.name = ko.observable(data.name);
   this.lat = ko.observable(data.lat);
   this.lng = ko.observable(data.lng);
 };
-
-// convert observable instances to location object to pass to addMarker function
+// convert an array of observables to location objects for mapping
 function convertObservablesToLocations(list) {
    return list.map(function(restaurant) {
     return {
@@ -228,7 +207,7 @@ function convertObservablesToLocations(list) {
     };
   });
 }
-
+//  convert a single observable to a location object for mapping
 function convertToLocation(restaurant) {
   return {
     name: restaurant.name(),
