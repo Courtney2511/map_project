@@ -51,7 +51,9 @@ window.fbAsyncInit = function() {
      if (d.getElementById(id)) {return;}
      js = d.createElement(s); js.id = id;
      js.src = "https://connect.facebook.net/en_US/sdk.js";
-     js.onerror = function() { alert("Facebook failed to load, app functionality will be limited")};
+     js.onerror = function() {
+       alert("Facebook failed to load, app functionality will be limited");
+     };
      fjs.parentNode.insertBefore(js, fjs);
    }(document, 'script', 'facebook-jssdk'));
 
