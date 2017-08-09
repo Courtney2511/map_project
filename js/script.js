@@ -1,3 +1,5 @@
+ /*jshint esversion: 6 */
+
 const MAP_API_KEY = "AIzaSyBB9SLtMMAk06MZodCNZ7MuvJ2eX2ClGWM";
 const APP_ID = '1564943346912728';
 const APP_SECRET = '1bcf3ad4d4708361f6988bce3ebb6d34';
@@ -179,44 +181,26 @@ var ViewModel = function() {
     if (!filter) {
       hideMarkers();
         if (map) {
-          addMarkers(convertObservablesToLocations(self.restaurantList()));
+          addMarkers(self.restaurantList());
         }
         return self.restaurantList();
     } else {
         hideMarkers();
         // filter restaurants for given letter sequence
         let filteredList = ko.utils.arrayFilter(self.restaurantList(), function(restaurant) {
-            return restaurant.name().toLowerCase().indexOf(filter) !== -1;
+            return restaurant.name.toLowerCase().indexOf(filter) !== -1;
         });
-        addMarkers(convertObservablesToLocations(filteredList));
+        addMarkers(filteredList);
         return filteredList;
     }
   }, ViewModel);
 };
 // location object constructor
 var Location = function(data) {
-  this.name = ko.observable(data.name);
-  this.lat = ko.observable(data.lat);
-  this.lng = ko.observable(data.lng);
+  this.name = data.name;
+  this.lat = data.lat;
+  this.lng = data.lng;
 };
-// convert an array of observables to location objects for mapping
-function convertObservablesToLocations(list) {
-   return list.map(function(restaurant) {
-    return {
-      name: restaurant.name(),
-      lat: restaurant.lat(),
-      lng: restaurant.lng()
-    };
-  });
-}
-//  convert a single observable to a location object for mapping
-function convertToLocation(restaurant) {
-  return {
-    name: restaurant.name(),
-    lat: restaurant.lat(),
-    lng: restaurant.lng()
-  };
-}
 
 function selectRestaurant(data) {
   hideMarkers();
@@ -224,8 +208,7 @@ function selectRestaurant(data) {
     hideMarker();
   }
   toggleMenu();
-  console.log(convertToLocation(data));
-  addMarker(convertToLocation(data));
+  addMarker(data);
 }
 
 // toggle restaurant list open and closed

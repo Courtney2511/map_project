@@ -71,7 +71,8 @@ h3 {
 
 /* info window styles */
 
-.address, .social-info {
+.address,
+.social-info {
   padding-bottom: 2px;
 }
 
@@ -94,8 +95,6 @@ small {
     display: none;
   }
 
-  #open-list {}
-
   #main-search {
     width: 90%;
     margin: 0;
@@ -105,6 +104,7 @@ small {
     color: #f2f2f2;
     margin-left: 6px;
   }
+
   #map {
     width: 100%;
     height: 90vh;
